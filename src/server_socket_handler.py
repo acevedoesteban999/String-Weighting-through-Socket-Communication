@@ -15,10 +15,11 @@ class serverSocketHanlder(socketHandler):
             Init Server Handle Socket
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            # Open the server
             sock.bind((self._host, self._port)) 
             sock.listen(1)
             while True:
-                conn, _ = sock.accept() 
+                conn, _ = sock.accept()                                 # Accept a client
                 with conn:
                     while True:                                         # Loop until the end signal (\n\n) is received
                         data = conn.recv(1024).decode() 
@@ -30,7 +31,7 @@ class serverSocketHanlder(socketHandler):
                         if weighting: 
                             conn.sendall(weighting.encode())            
                         
-                        if ("\n\n" in data):                            # End of data signal, exit until a new connection
+                        if ("\n\r" in data):                            # End of data signal, exit until a new connection
                             break
         
 
