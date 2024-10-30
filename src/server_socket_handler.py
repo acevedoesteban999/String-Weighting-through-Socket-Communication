@@ -24,8 +24,7 @@ class serverSocketHanlder(socketHandler):
                     while True:                                         # Loop until the end signal (\n\n) is received
                         data = conn.recv(1024).decode() 
                         
-                        lines = [i for i in data.split("\n") if i]      # Not take empty strings 
-
+                        lines = [i for i in data.split("\n") if i and i!='\r']      # Not take empty strings or end signal
                         weighting:str = self.process_data(lines)        # Process data
                         
                         if weighting: 
