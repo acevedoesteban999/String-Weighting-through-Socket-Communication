@@ -4,6 +4,8 @@ import string
 
 WORD_MIN_LEN = 50
 WORD_MAX_LEN = 100
+GENERATE_MAX_LINES = 1000
+READ_MAX_LINES = 2
 
 class fileHandler():
     """
@@ -36,14 +38,36 @@ class fileHandler():
         """
         valid_caracters = string.ascii_letters + string.digits 
         return ''.join(random.choice(valid_caracters) for _ in range(WORD_MIN_LEN,WORD_MAX_LEN))
+   
+    @staticmethod
+    def __generate_and_write(filename:str,separator,_range):
+            """
+                This Internal function only generate the word and write into file 
+            """
+            # Generate and add spaces with 
+            strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word() + separator) for _ in range(_range)]
+            # Write data
+            with open(filename, 'a') as file:   
+                file.writelines(strings)
     
     @staticmethod
-    def generate_strings_file(filename:str = "chains.txt",separator = '\n',get_strings:bool = False) ->list|None:
+    def generate_strings_file(filename:str = "chains.txt",separator = '\n') ->None:
         """
             Read the strings and save them in a file
                 - The number of readings is defined at execution time with the 'input' Python method.
                 - The separator is the character used to separate one item from another
-                - 'get_strings' indicate if the data should be returned directly
+                
+            Important!
+                - Since the maximum is 1 million possible lines, and each line has a maximum of 
+            100 characters, this amounts to 100 million bytes, or 100 MB. To avoid this 
+            large memory usage, it will be divided into VAR_GLOBAL segments, saved to the 
+            file, and continuously generated until the target quantity is reached
+                - To apply the division in equal cycles and write each GENERATE_MAX_LINES,
+            the division of the number of times GENERATE_MAX_LINES fits into cont_str 
+            tells me how many cycles of GENERATE_MAX_LINES I need to perform. For the 
+            final cycle, which may have fewer values than GENERATE_MAX_LINES, the remainder 
+            of the division tells me how many additional words I need to reach cont_str exactly
+            
         """
         # Select the string counter
         count_str = 0
@@ -64,34 +88,48 @@ class fileHandler():
             
             break
         
-        # Generate and add spaces
-        strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word() + separator) for i in range(count_str)]
+        #First clear the file 
+        with open(filename, 'w') as _:   
+            pass
         
-        # Write data
-        with open(filename, 'w') as file:   
-            file.writelines(strings)
-            
-        # Return the generated data directly
-        if get_strings:
-            return strings
+        
+    
+        # Number of cycles to reach the highest value of GENERATE_MAX_LINES without exceeding
+        for _ in range(int(count_str/GENERATE_MAX_LINES)):
+            fileHandler.__generate_and_write(filename,separator,GENERATE_MAX_LINES)
+        
+        # Remaining words that need to be generated; this number is less than GENERATE_MAX_LINES
+        fileHandler.__generate_and_write(filename,separator,count_str%GENERATE_MAX_LINES)
         
     
     @staticmethod
-    def read_strings_from_file(filename:str = "chains.txt",separator = '\n') -> str:
+    def read_strings_from_file(line_count:int,filename:str = "chains.txt",separator = '\n') -> str:
         """
             Read strings from file  
                 - Filename is a name of file to read
                 - The separator is a character for splitting the reads 
         """
         lines = []
+        current_line_number = 0
         with open(filename, 'r') as file:
-            lines = file.read().strip().split(separator)
-        return lines
-
+            while True:
+                for _ in range(line_count):
+                    if not file.readline():
+                        return lines,line_count,True  
+                for _ in range(READ_MAX_LINES):
+                    _line = file.readline(106)
+                    print(_line)
+                    if not _line:
+                        return lines,line_count,True
+                    lines.append(_line)
+                    line_count+=1
+                return lines,line_count,False
+                
     @staticmethod
     def write_strings_into_file(data:list,filename:str = "response.txt",separator = '\n') -> None:
         """
-            Write strings into file  
+            Write strings into file 
+             
         """
         _data = [i + separator for i in data]
         with open(filename, 'w') as file:
