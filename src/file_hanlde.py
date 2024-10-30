@@ -43,6 +43,7 @@ class fileHandler():
             Read the strings and save them in a file
                 - The number of readings is defined at execution time with the 'input' Python method.
                 - The separator is the character used to separate one item from another
+                - 'get_strings' indicate if the data should be returned directly
         """
         # Select the string counter
         count_str = 0
@@ -66,9 +67,11 @@ class fileHandler():
         # Generate and add spaces
         strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word() + separator) for i in range(count_str)]
         
-        with open(filename, 'w') as file:
+        # Write data
+        with open(filename, 'w') as file:   
             file.writelines(strings)
-        
+            
+        # Return the generated data directly
         if get_strings:
             return strings
         

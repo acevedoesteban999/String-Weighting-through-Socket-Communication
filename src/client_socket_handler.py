@@ -9,9 +9,9 @@ class clientSocketHanlder(socketHandler):
         try:
             self._socket.connect((self._host,self._port))
             return True
-        except ConnectionRefusedError as e:
+        except ConnectionRefusedError as e:     # Connection Error
             logging.error(f" Could not connect to {self._host} : {self._port}\n\t *{e}")
-        except Exception as e:
+        except Exception as e:                  # Another Error                
             logging.error(e)
         return False
     
