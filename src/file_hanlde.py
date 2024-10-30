@@ -6,12 +6,6 @@ WORD_MIN_LEN = 50
 WORD_MAX_LEN = 100
 
 class fileHandler():
-    def __init__(self,filename:str = "chains.txt"):
-        self._filename = filename
-    
-    def get_filename(self):
-        return self._filename
-    
     
     @staticmethod
     def add_spaces_to_word(word):
@@ -41,8 +35,8 @@ class fileHandler():
         valid_caracters = string.ascii_letters + string.digits 
         return ''.join(random.choice(valid_caracters) for _ in range(WORD_MIN_LEN,WORD_MAX_LEN))
     
-    
-    def generate_file(self):
+    @staticmethod
+    def generate_strings_file(filename:str = "chains.txt",newline = '\n',get_strings:bool = False) ->list|None:
         """
             Read the strings and save them in a file.
                 - Use the 'input' method to read.
@@ -67,9 +61,24 @@ class fileHandler():
             
             break
     
-        strings = [self.add_spaces_to_word(self.generate_word()) for i in range(count_str)]
+        strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word()) for i in range(count_str)]
         
-        with open(self._filename, 'w') as file:
+        with open(filename, 'w') as file:
             for line in strings:
-                file.write(line+ "\n")
+                file.write(line + newline)
+        logging.info(f"\File '{filename}' generated with {count_str} strings correctly\n")
         
+        if get_strings:
+            return strings
+        
+    
+    @staticmethod
+    def read_strings_from_file(filename:str = "chains.txt",newline = '\n') -> str:
+        """
+            Read strings from file  
+        """
+        lines = []
+        with open(filename, 'r') as file:
+            lines = file.read().strip().split(newline)
+        return lines
+    
