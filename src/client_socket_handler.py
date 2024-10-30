@@ -20,6 +20,7 @@ class clientSocketHanlder(socketHandler):
     
     def send_data(self,data):
         try:
+            print(data)
             self._socket.sendall(data)
             return  self._socket.recv(1024).decode()   
         except Exception as e:
@@ -55,10 +56,8 @@ class clientSocketHanlder(socketHandler):
                 
         # Before finishing the loop, it's necessary to check if there is any data that has not been sent yet
         if count_str_grouped:
-            response+=self.send_data((buffer_str + "\r").encode())
-            #self._socket.sendall((buffer_str + "\r").encode())   # Send data and the end signal    
-            #response += self._socket.recv(1024).decode()   
-        
+            self._socket.sendall((buffer_str + "\r").encode())   # Send data and the end signal    
+            response += self._socket.recv(1024).decode()   
         else:
             self._socket.sendall("\r".encode())                   # Send only the end signal
             
