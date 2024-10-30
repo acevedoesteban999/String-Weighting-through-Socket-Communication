@@ -19,3 +19,9 @@ class socketHandler(ABC):
         pass
         
         
+    def close_socket(self):
+        """
+            Close the socket
+        """
+        self._socket.close()
+        

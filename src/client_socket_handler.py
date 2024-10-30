@@ -17,22 +17,6 @@ class clientSocketHanlder(socketHandler):
             logging.error(e)
         return False
     
-    
-    def send_data(self,data):
-        try:
-            print(data)
-            self._socket.sendall(data)
-            return  self._socket.recv(1024).decode()   
-        except Exception as e:
-            #self._socket.close()
-            #self._socket.connect((self._host,self._port))
-            try:
-                self._socket.sendall(data)
-                return  self._socket.recv(1024).decode()   
-            except Exception as e:
-                print("EXCEPT1",e)
-        return ""
-    
     def send_strings_data(self,data_str:str) -> str:
         """
             Send strings agrupadted to server
@@ -47,8 +31,8 @@ class clientSocketHanlder(socketHandler):
             buffer_str += line                                  # Group strings 
             count_str_grouped += 1                              # Increment counter  
             if count_str_grouped >= MAX_ITEMS_TO_SEND:   
-                self._socket.sendall(buffer_str.encode())       # Its necesary convert to binay ( str.encode, by default utf-8)
-                response += self._socket.recv(1024).decode()    # Its necesary convert to str ( binary.decode, by default utf-8)
+                self._socket.sendall(buffer_str.encode())       # Is necesary convert to binay ( str.encode, by default utf-8)
+                response += self._socket.recv(1024).decode()    # Is necesary convert to str ( binary.decode, by default utf-8)
                 
                 #Reset buffer and counter
                 buffer_str = ""
@@ -56,13 +40,13 @@ class clientSocketHanlder(socketHandler):
                 
         # Before finishing the loop, it's necessary to check if there is any data that has not been sent yet
         if count_str_grouped:
-            self._socket.sendall((buffer_str + "\r").encode())   # Send data and the end signal    
+            self._socket.sendall((buffer_str).encode())     
             response += self._socket.recv(1024).decode()   
-        else:
-            self._socket.sendall("\r".encode())                   # Send only the end signal
+    
             
         return response
-         
+    
+    
         
         
         

@@ -1,11 +1,12 @@
 import logging
 import random
 import string
+from typing import Union
 
 WORD_MIN_LEN = 50
 WORD_MAX_LEN = 100
 GENERATE_MAX_LINES = 1000
-READ_MAX_LINES = 2
+READ_WRITE_MAX_LINES = 100
 
 class fileHandler():
     """
@@ -14,15 +15,15 @@ class fileHandler():
     @staticmethod
     def add_spaces_to_word(word:str) ->str:
         """
-            Add 3-5 blank spaces to a word
-                - Do not add at the beginning or end, nor consecutive blank spaces
-        """
-        spaces = random.randint(3, 5)                                           #generate numbers of spaces to insert
-        """
-            To avoid spaces at the beginning and end, the range is from [1, max-1], and to prevent 
-            having 2 consecutive spaces, I take the odd (or even, there’s no difference) values that remain, 
+            Add 3-5 blank spaces to a word randomly
+                - This method not add at the beginning or end, nor consecutive blank spaces
+                - To avoid spaces at the beginning and end, the range is from [1, max-1], and to prevent 
+            having 2 consecutive spaces, I take the odd (or maybe even) values that remain, 
             so the possible blank spaces will always be separated by at least an even number
         """
+        spaces = random.randint(3, 5)                                           #generate numbers of spaces to insert
+        
+        # Avoid spaces using odd number and [1,max-1] range
         available_positions = [i for i in range(1,len(word)-1) if i%2 != 0]       
         pos = random.sample(available_positions, spaces)                        # choise a random positions
         for _pos in sorted(pos):        
@@ -103,33 +104,45 @@ class fileHandler():
         
     
     @staticmethod
-    def read_strings_from_file(line_count:int,filename:str = "chains.txt",separator = '\n') -> str:
+    def read_strings_from_file(line_count:int,filename:str = "chains.txt") -> tuple[list,int]:
         """
             Read strings from file  
                 - Filename is a name of file to read
-                - The separator is a character for splitting the reads 
+              
+            Important!
+                - Since the maximum is 1 million possible lines, and each line has a maximum of 100
+                characters, this amounts to 100 million bytes, or 100 MB. To avoid this large memory
+                usage, only each READ_WRITE_MAX_LINES will be read, and a counter of where it left 
+                off will be returned so that it can be used at another time
         """
         lines = []
-        with open(filename, 'r') as file:
-            for _ in range(line_count):
-                if not file.readline():
+        with open(filename, 'r') as file:               # Open file in read mode 
+            for _ in range(line_count):                 # Pass all lines readed
+                if not file.readline():                 # return if is end of file
                     return lines,line_count  
-            for _ in range(READ_MAX_LINES):
+            
+            for _ in range(READ_WRITE_MAX_LINES):       # read READ_WRITE_MAX_LINES lines 
                 _line = file.readline(106)
-                if not _line:
+                if not _line:                           # return if is end of file
                     return lines,line_count
-                lines.append(_line)
-                line_count+=1
+                
+                lines.append(_line)                     # save line readed
+                line_count+=1                           # increment count
+                
             return lines,line_count
                 
     @staticmethod
     def write_strings_into_file(data:list,filename:str = "response.txt",separator = '\n') -> None:
         """
             Write strings into file 
-             
+            
+            Important!
+                - Since the maximum is 1 million possible lines, and each line has a maximum of 100
+                characters, this amounts to 100 million bytes, or 100 MB. To avoid this large memory
+                usage, it will only write in append mode READ_WRITE_MAX_LINES lines
         """
-        _data = [i + separator for i in data]
-        with open(filename, 'w') as file:
+        _data = [i + separator for i in data]   # Put separator after write
+        with open(filename, 'a') as file:
             file.writelines( _data )
     
     
