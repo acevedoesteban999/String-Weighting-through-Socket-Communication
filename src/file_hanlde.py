@@ -9,6 +9,29 @@ class fileHandler():
     def __init__(self,filename:str = "chains.txt"):
         self._filename = filename
     
+    def get_filename(self):
+        return self._filename
+    
+    
+    @staticmethod
+    def add_spaces_to_word(word):
+        """
+            Add 3-5 blank spaces to a word
+                *Do not add at the beginning or end, nor consecutive blank spaces
+        """
+        spaces = random.randint(3, 5)                                           #generate numbers of spaces to insert
+        """
+            To avoid spaces at the beginning and end, the range is from [1, max-1], and to prevent 
+            having 2 consecutive spaces, I take the odd (or even, there’s no difference) values that remain, 
+            so the possible blank spaces will always be separated by at least an even number
+        """
+        available_positions = [i for i in range(1,len(word)-1) if i%2 != 0]       
+        pos = random.sample(available_positions, spaces)                        # choise a random positions
+        for _pos in sorted(pos):        
+            word = word[:_pos] + ' ' + word[_pos:]                              #insert sections into word
+        
+        return word
+    
     @staticmethod
     def generate_word():
         """
@@ -44,6 +67,9 @@ class fileHandler():
             
             break
     
+        strings = [self.add_spaces_to_word(self.generate_word()) for i in range(count_str)]
         
-        
+        with open(self._filename, 'w') as file:
+            for line in strings:
+                file.write(line+ "\n")
         
