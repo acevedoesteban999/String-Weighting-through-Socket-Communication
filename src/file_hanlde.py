@@ -22,7 +22,7 @@ class fileHandler():
         available_positions = [i for i in range(1,len(word)-1) if i%2 != 0]       
         pos = random.sample(available_positions, spaces)                        # choise a random positions
         for _pos in sorted(pos):        
-            word = word[:_pos] + ' ' + word[_pos:]                              #insert sections into word
+            word = word[:_pos] + ' ' + word[_pos:]                              # insert sections into word
         
         return word
     
@@ -43,6 +43,7 @@ class fileHandler():
                 - The number of readings is defined at execution time.
                 - The file name is preconfigured.
         """
+        # Select the string counter
         count_str = 0
         while(True):
             try:
@@ -60,13 +61,14 @@ class fileHandler():
                 continue
             
             break
-    
+        
+        # Generate and add spaces
         strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word() + newline) for i in range(count_str)]
         
         with open(filename, 'w') as file:
-            for line in strings:
-                file.write(line)
-        logging.info(f"\File '{filename}' generated with {count_str} strings correctly\n")
+            file.writelines(strings)
+            
+        logging.info(f"File '{filename}' generated with {count_str} strings correctly\n")
         
         if get_strings:
             return strings
@@ -81,4 +83,14 @@ class fileHandler():
         with open(filename, 'r') as file:
             lines = file.read().strip().split(newline)
         return lines
+
+    @staticmethod
+    def write_strings_into_file(data:list,filename:str = "response.txt",newline = '\n') -> None:
+        """
+            Write strings into file  
+        """
+        _data = [i + newline for i in data]
+        with open(filename, 'w') as file:
+            file.writelines( _data )
+    
     
