@@ -18,6 +18,20 @@ class clientSocketHanlder(socketHandler):
         return False
     
     
+    def send_data(self,data):
+        try:
+            self._socket.sendall(data)
+            return  self._socket.recv(1024).decode()   
+        except Exception as e:
+            #self._socket.close()
+            #self._socket.connect((self._host,self._port))
+            try:
+                self._socket.sendall(data)
+                return  self._socket.recv(1024).decode()   
+            except Exception as e:
+                print("EXCEPT1",e)
+        return ""
+    
     def send_strings_data(self,data_str:str) -> str:
         """
             Send strings agrupadted to server
@@ -41,10 +55,12 @@ class clientSocketHanlder(socketHandler):
                 
         # Before finishing the loop, it's necessary to check if there is any data that has not been sent yet
         if count_str_grouped:
-            self._socket.sendall((buffer_str + "\n\r").encode())   # Send data and the end signal    
-            response += self._socket.recv(1024).decode()   
+            response+=self.send_data((buffer_str + "\r").encode())
+            #self._socket.sendall((buffer_str + "\r").encode())   # Send data and the end signal    
+            #response += self._socket.recv(1024).decode()   
+        
         else:
-            self._socket.sendall("\n\r".encode())                   # Send only the end signal
+            self._socket.sendall("\r".encode())                   # Send only the end signal
             
         return response
          

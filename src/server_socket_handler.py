@@ -23,15 +23,16 @@ class serverSocketHanlder(socketHandler):
                 with conn:
                     while True:                                         # Loop until the end signal (\n\n) is received
                         data = conn.recv(1024).decode() 
+                        if not data:
+                            break
+                        lines = [i for i in data.split("\n") if i and i!='\r']      # Not take empty strings 
                         
-                        lines = [i for i in data.split("\n") if i]      # Not take empty strings 
-
                         weighting:str = self.process_data(lines)        # Process data
                         
                         if weighting: 
                             conn.sendall(weighting.encode())            
                         
-                        if ("\n\r" in data):                            # End of data signal, exit until a new connection
+                        if ("\r" in data):                            # End of data signal, exit until a new connection
                             break
         
 

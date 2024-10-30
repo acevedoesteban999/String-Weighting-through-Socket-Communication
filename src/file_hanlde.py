@@ -110,20 +110,17 @@ class fileHandler():
                 - The separator is a character for splitting the reads 
         """
         lines = []
-        current_line_number = 0
         with open(filename, 'r') as file:
-            while True:
-                for _ in range(line_count):
-                    if not file.readline():
-                        return lines,line_count,True  
-                for _ in range(READ_MAX_LINES):
-                    _line = file.readline(106)
-                    print(_line)
-                    if not _line:
-                        return lines,line_count,True
-                    lines.append(_line)
-                    line_count+=1
-                return lines,line_count,False
+            for _ in range(line_count):
+                if not file.readline():
+                    return lines,line_count  
+            for _ in range(READ_MAX_LINES):
+                _line = file.readline(106)
+                if not _line:
+                    return lines,line_count
+                lines.append(_line)
+                line_count+=1
+            return lines,line_count
                 
     @staticmethod
     def write_strings_into_file(data:list,filename:str = "response.txt",separator = '\n') -> None:

@@ -27,20 +27,19 @@ if __name__ == "__main__":
         
         logging.info(f"Generate process completed in [{time.time() - start_time}] seconds")
         
-        eof = False 
         start_time = time.time()
         line_count = 0
         while(True):
             
-            strings , line_count, eof = fileHandler.read_strings_from_file(line_count)
-            if eof:
+            strings , line_count = fileHandler.read_strings_from_file(line_count)
+            print([string.encode() for string in strings],line_count)
+            if not strings:
                 break
-            print(strings,line_count)
             
             # Send strings to server 
             response = client_socket.send_strings_data(strings)
-            print("A")
+          
             # Write response into file ( separator is null , the protocol dictates that the server already returns the strings with "\n" between items )
-            fileHandler.write_strings_into_file(response,separator="")
+            #fileHandler.write_strings_into_file(response,separator="")
         logging.info(f"Process completed in   [{time.time() - start_time}] seconds")
     
