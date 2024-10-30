@@ -9,7 +9,14 @@ class fileHandler():
     def __init__(self,filename:str = "chains.txt"):
         self._filename = filename
     
-    
+    @staticmethod
+    def generate_word():
+        """
+            Generate a random word only with ['a-z', 'A-Z', '0-9'] 
+                * The range defined by the constants WORD_MIN_LEN and WORD_MAX_LEN
+        """
+        valid_caracters = string.ascii_letters + string.digits 
+        return ''.join(random.choice(valid_caracters) for _ in range(WORD_MIN_LEN,WORD_MAX_LEN))
     
     
     def generate_file(self):
