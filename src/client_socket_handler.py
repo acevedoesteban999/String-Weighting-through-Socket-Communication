@@ -41,10 +41,10 @@ class clientSocketHanlder(socketHandler):
                 
         # Before finishing the loop, it's necessary to check if there is any data that has not been sent yet
         if count_str_grouped:
-            self._socket.sendall((buffer_str + "\n\r").encode())   # Send data and the end signal    
+            self._socket.sendall((buffer_str + "\r").encode())   # Send data and the end signal    
             response += self._socket.recv(1024).decode()   
         else:
-            self._socket.sendall("\n\r".encode())                   # Send only the end signal
+            self._socket.sendall("\r".encode())                   # Send only the end signal
             
         return response
          

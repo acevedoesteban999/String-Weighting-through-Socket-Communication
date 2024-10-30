@@ -30,7 +30,7 @@ class serverSocketHanlder(socketHandler):
                         if weighting: 
                             conn.sendall(weighting.encode())            
                         
-                        if ("\n\r" in data):                            # End of data signal, exit until a new connection
+                        if ("\r" in data):                            # End of data signal, exit until a new connection
                             break
         
 
