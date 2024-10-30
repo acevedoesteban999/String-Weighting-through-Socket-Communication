@@ -8,7 +8,7 @@ WORD_MAX_LEN = 100
 class fileHandler():
     
     @staticmethod
-    def add_spaces_to_word(word):
+    def add_spaces_to_word(word:str) ->str:
         """
             Add 3-5 blank spaces to a word
                 *Do not add at the beginning or end, nor consecutive blank spaces
@@ -27,7 +27,7 @@ class fileHandler():
         return word
     
     @staticmethod
-    def generate_word():
+    def generate_word()->str:
         """
             Generate a random word only with ['a-z', 'A-Z', '0-9'] 
                 * The range defined by the constants WORD_MIN_LEN and WORD_MAX_LEN
@@ -61,11 +61,11 @@ class fileHandler():
             
             break
     
-        strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word()) for i in range(count_str)]
+        strings = [fileHandler.add_spaces_to_word(fileHandler.generate_word() + newline) for i in range(count_str)]
         
         with open(filename, 'w') as file:
             for line in strings:
-                file.write(line + newline)
+                file.write(line)
         logging.info(f"\File '{filename}' generated with {count_str} strings correctly\n")
         
         if get_strings:
