@@ -17,29 +17,29 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     
-    client_socket = clientSocketHanlder()   # Init handler 
-    if client_socket.socket_handler_init(): # Init connection
-        """
-            Since the same file is being generated, the condition of get_strings is set to true 
-            to directly obtain the list from the file. In case another file or read again:
-                - strings = fileHandler.read_strings_from_file(filename)
-        """
-        start_time = time.time()
+    client_socket = clientSocketHanlder()                       # Init handler 
+    if client_socket.socket_handler_init():                     # Init connection
         
-        strings = fileHandler().generate_strings_file(get_strings = True)
+        start_time = time.time()                
+        
+        fileHandler().generate_strings_file()                   # Generate file
         
         logging.info(f"Generate process completed in [{time.time() - start_time}] seconds")
         
-        
         start_time = time.time()
         
-        # Send strings to server 
-        response = client_socket.send_strings_data(strings)
-        
-        logging.info(f"Sending process completed in  [{time.time() - start_time}] seconds")
-        
-        start_time = time.time()
-        # Write response into file ( separator is null , the protocol dictates that the server already returns the strings with "\n" between items )
-        fileHandler.write_strings_into_file(response,separator="")
-        logging.info(f"Writen process completed in   [{time.time() - start_time}] seconds")
+        line_count = 0                                          # This counter is used in the method: 'fileHandler.read_strings_from_file' to maintain the order of reading lines from the file
+        while(True):
+            strings , line_count = fileHandler.read_strings_from_file(line_count)
+            if not strings:                                     # Indicates that the file in 'fileHandler.read_strings_from_file' has reached its end  
+                break
+            
+            
+            response = client_socket.send_strings_data(strings) # Send strings to server 
+           
+            # Write response into file ( separator is null in this case , the protocol dictates that the server already returns the strings with "\n" between items )
+            fileHandler.write_strings_into_file(response,separator="")
+            
+        client_socket.close_socket()
+        logging.info(f"Process completed in   [{time.time() - start_time}] seconds")
     

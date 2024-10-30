@@ -21,17 +21,20 @@ class serverSocketHanlder(socketHandler):
             while True:
                 conn, _ = sock.accept()                                 # Accept a client
                 with conn:
-                    while True:                                         # Loop until the end signal (\n\n) is received
+                    while True:                                         # Loop until the connection is close
                         data = conn.recv(1024).decode() 
                         
-                        lines = [i for i in data.split("\n") if i and i!='\r']      # Not take empty strings or end signal
+                        if not data:                                    # Close connection
+                            break   
+                        
+                        lines = data.split("\n")                        # Take a list of strings separated by the '\n' character
+                        
                         weighting:str = self.process_data(lines)        # Process data
                         
                         if weighting: 
-                            conn.sendall(weighting.encode())            
-                        
-                        if ("\r" in data):                            # End of data signal, exit until a new connection
-                            break
+                            conn.sendall(weighting.encode())            # Send response to client      
+                              
+                    
         
 
     def process_data(self,lines:str) -> str:
@@ -42,16 +45,16 @@ class serverSocketHanlder(socketHandler):
         """
         weighting = ""
         for line in lines:
-            if "aa" in line.lower():
+            if "aa" in line.lower():                                        # This way, the cases: [aa,aA,Aa,AA] are covered  
                 logging.warning(f"Double 'a' rule detected >> '{line}'") 
                 weighting += "1000\n"
             else:
-                try: # Try For invalid strings where there are no spaces ( division by zero )
+                try:                                                                        # Try For invalid strings where there are no spaces ( division by zero )
                     count_letters = sum(caracter.isalpha() for caracter in line )           # Get letters counter
-                    count_numbers = sum(caracter.isnumeric() for caracter in line )         # Get cumbers counter
+                    count_numbers = sum(caracter.isnumeric() for caracter in line )         # Get numbers counter
                     count_spaces = sum(caracter.isspace() for caracter in line )            # Get spaces counter
                     metric:float = (count_letters *1.5 + count_numbers*2)/count_spaces      # Apply weighting formula
-                    weighting += f"{metric}\n"                                              #Save as string
+                    weighting += f"{metric}\n"                                              # Save as string
                 except:
                     weighting += "0\n"                                                      # Return 0 for this data if there is any error 
         return weighting
