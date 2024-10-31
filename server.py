@@ -8,6 +8,7 @@ sys.path[0] = str(Path(sys.path[0]).parent)
 
 # Logging configuration
 logging.basicConfig(
+    level=logging.INFO,
     format='[%(asctime)s][%(levelname)s]: %(message)s',  
     datefmt='%Y-%m-%d %H:%M:%S'                         
 )

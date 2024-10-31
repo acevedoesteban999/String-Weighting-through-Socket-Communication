@@ -28,6 +28,8 @@ if __name__ == "__main__":
         
         start_time = time.time()
         
+        fileHandler.clear_file('response.txt')                  # Clear file , this method: 'fileHandler.write_strings_into_file' open file in mode append , need first time be empty
+        
         line_count = 0                                          # This counter is used in the method: 'fileHandler.read_strings_from_file' to maintain the order of reading lines from the file
         while(True):
             strings , line_count = fileHandler.read_strings_from_file(line_count)

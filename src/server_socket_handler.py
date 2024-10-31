@@ -18,6 +18,7 @@ class serverSocketHanlder(socketHandler):
             # Open the server
             sock.bind((self._host, self._port)) 
             sock.listen(1)
+            logging.info(f"Server init on {self._host}:{self._port}")
             while True:
                 conn, _ = sock.accept()                                 # Accept a client
                 with conn:
@@ -27,7 +28,7 @@ class serverSocketHanlder(socketHandler):
                         if not data:                                    # Close connection
                             break   
                         
-                        lines = data.split("\n")                        # Take a list of strings separated by the '\n' character
+                        lines = [ i for i in data.split("\n") if i]    # Take a list of strings separated by the '\n' character and ignore empty items
                         
                         weighting:str = self.process_data(lines)        # Process data
                         

@@ -90,8 +90,7 @@ class fileHandler():
             break
         
         #First clear the file 
-        with open(filename, 'w') as _:   
-            pass
+        fileHandler.clear_file(filename)
         
         
     
@@ -131,6 +130,11 @@ class fileHandler():
                 
             return lines,line_count
                 
+    @staticmethod
+    def clear_file(filename:str):
+        with open(filename, 'w') as _:   
+            pass
+    
     @staticmethod
     def write_strings_into_file(data:list,filename:str = "response.txt",separator = '\n') -> None:
         """
