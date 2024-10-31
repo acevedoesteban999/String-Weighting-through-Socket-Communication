@@ -1,5 +1,6 @@
 from .socket.socket_handler import socketHandler,socket
 import logging
+from .environ_handler import ENVIROMENT
 
 class serverSocketHanlder(socketHandler): 
     """
@@ -19,11 +20,21 @@ class serverSocketHanlder(socketHandler):
             sock.bind((self._host, self._port)) 
             sock.listen(1)
             logging.info(f"Server init on {self._host}:{self._port}")
+            
+            """ 
+                The constant 'MAX_RECV' is the max number of bytes to recive. Approximately 
+                the max number of lines to send is determined by the maximum line 
+                length (95 + 5 + 1; 5 to reach 100 and one for the separator 
+                character '\n') plus 10 bytes for other protocol characters, 
+                such as end-of-line characters
+            """
+            MAX_RECV = ENVIROMENT['MAX_ITEMS_TO_SEND'] * (ENVIROMENT['WORD_MAX_LEN'] + 5) + 10
+            
             while True:
                 conn, _ = sock.accept()                                 # Accept a client
                 with conn:
                     while True:                                         # Loop until the connection is close
-                        data = conn.recv(1024).decode() 
+                        data = conn.recv(MAX_RECV).decode() 
                         
                         if not data:                                    # Close connection
                             break   
@@ -55,6 +66,7 @@ class serverSocketHanlder(socketHandler):
                     count_numbers = sum(caracter.isnumeric() for caracter in line )         # Get numbers counter
                     count_spaces = sum(caracter.isspace() for caracter in line )            # Get spaces counter
                     metric:float = (count_letters *1.5 + count_numbers*2)/count_spaces      # Apply weighting formula
+                    metric = round(metric,3)                                                # Only take 3 decimal places
                     weighting += f"{metric}\n"                                              # Save as string
                 except:
                     weighting += "0\n"                                                      # Return 0 for this data if there is any error 

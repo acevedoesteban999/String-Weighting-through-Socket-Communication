@@ -1,7 +1,7 @@
 from .socket.socket_handler import socketHandler
 import logging
+from .environ_handler import ENVIROMENT
 
-MAX_ITEMS_TO_SEND = 10
 
 class clientSocketHanlder(socketHandler):   
     def socket_handler_init(self) -> bool:
@@ -30,9 +30,12 @@ class clientSocketHanlder(socketHandler):
         for line in data_str:
             buffer_str += line                                  # Group strings 
             count_str_grouped += 1                              # Increment counter  
-            if count_str_grouped >= MAX_ITEMS_TO_SEND:   
+            if count_str_grouped >= ENVIROMENT['MAX_ITEMS_TO_SEND']:   
                 self._socket.sendall(buffer_str.encode())       # Is necesary convert to binay ( str.encode, by default utf-8)
-                response += self._socket.recv(1024).decode()    # Is necesary convert to str ( binary.decode, by default utf-8)
+                
+                
+                # The number of bytes to receive will be at least equal to the number of bytes sent, plus 10. Ten bytes per line at most, which will include weighting
+                response += self._socket.recv(ENVIROMENT["MAX_ITEMS_TO_SEND"] * 10).decode()    # Is necesary convert to str ( binary.decode, by default utf-8)
                 
                 #Reset buffer and counter
                 buffer_str = ""
