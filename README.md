@@ -37,12 +37,14 @@
     FILE_RESPONSE = response.txt
 
 #### 3 . Init Server
+In a terminal, type:
     
     python server.py
     
-It should look something like: '*Server init on localhost:8080*'
+It should look something like: '*Server has started on localhost:8080*'
 
 #### 4 . Init Client:
+In a different terminal than the server, type:
 
     python client.py
 

@@ -17,9 +17,14 @@ class serverSocketHanlder(socketHandler):
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             # Open the server
-            sock.bind((self._host, self._port)) 
-            sock.listen(1)
-            logging.info(f"Server init on {self._host}:{self._port}")
+            try:
+                sock.bind((self._host, self._port)) 
+                sock.listen(1)
+            except Exception as e:
+                logging.error(f"Server could not start on {self._host}:{self._port}\n\t*{e}")
+                exit()
+                
+            logging.info(f"Server has started on {self._host}:{self._port}")
             
             """ 
                 The constant 'MAX_RECV' is the max number of bytes to recive. Approximately 
