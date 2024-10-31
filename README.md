@@ -26,7 +26,9 @@
     
     git clone https://github.com/acevedoesteban999/String-Weighting-through-Socket-Communication 
 
-#### 2 . Create a .env file in the root of the project:
+#### 2 . Create a .env:
+
+Enter the cloned folder 'String-Weighting-through-Socket-Communication' and create the file named .env with
 
     HOST = localhost
     PORT = 8080
