@@ -30,7 +30,7 @@ class serverSocketHanlder(socketHandler):
                     - Why 95? Because the maximum is 100 characters. If I have a maximum of 5 
                     spaces, the maximum case of 95 + 5 would make 100.
             """
-            MAX_RECV = ENVIROMENT['MAX_LINES_TO_SEND'] * (ENVIROMENT['WORD_MAX_LEN'] + 5) + 10
+            MAX_RECV = ENVIROMENT['MAX_LINES_TO_SEND'] * 110
             
             while True:
                 conn, _ = sock.accept()                                 # Accept a client

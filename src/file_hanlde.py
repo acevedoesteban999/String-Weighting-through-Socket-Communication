@@ -32,7 +32,6 @@ class fileHandler():
     def generate_word()->str:
         """
             Generate a random word only with ['a-z', 'A-Z', '0-9'] 
-                - The range defined by the constants WORD_MIN_LEN and WORD_MAX_LEN
         """
         valid_caracters = string.ascii_letters + string.digits 
         return ''.join(random.choice(valid_caracters) for _ in range(50,95))    #   Max range is 95 because the maximum is 100 characters. If I have a maximum of 5 spaces, the maximum case of 95 + 5 would make 100.
@@ -49,7 +48,7 @@ class fileHandler():
                 file.writelines(strings)
     
     @staticmethod
-    def generate_strings_file(filename:str = "chains.txt",separator = '\n') ->None:
+    def generate_strings_file(filename:str = ENVIROMENT['FILE_STRINGS'],separator = '\n') ->None:
         """
             Read the strings and save them in a file
                 - The number of readings is defined at execution time with the 'input' Python method.
@@ -100,7 +99,7 @@ class fileHandler():
         
     
     @staticmethod
-    def read_strings_from_file(line_count:int,filename:str = "chains.txt") -> tuple[list,int]:
+    def read_strings_from_file(line_count:int,filename:str = ENVIROMENT['FILE_STRINGS']) -> tuple[list,int]:
         """
             Read strings from file  
                 - Filename is a name of file to read
@@ -133,7 +132,7 @@ class fileHandler():
             pass
     
     @staticmethod
-    def write_strings_into_file(data:list,filename:str = "response.txt",separator = '\n') -> None:
+    def write_strings_into_file(data:list,filename:str = ENVIROMENT['FILE_RESPONSE'],separator = '\n') -> None:
         """
             Write strings into file 
             
