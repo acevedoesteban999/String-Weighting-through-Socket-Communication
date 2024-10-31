@@ -2,6 +2,7 @@ import logging
 from src.client_socket_handler import clientSocketHanlder
 from src.file_hanlde import fileHandler
 import time
+from src.environ_handler import ENVIROMENT
 
 # For Visual Studio Code debug
 import sys
@@ -20,15 +21,11 @@ if __name__ == "__main__":
     client_socket = clientSocketHanlder()                       # Init handler 
     if client_socket.socket_handler_init():                     # Init connection
         
-        start_time = time.time()                
-        
         fileHandler().generate_strings_file()                   # Generate file
-        
-        logging.info(f"Generate process completed in [{time.time() - start_time}] seconds")
         
         start_time = time.time()
         
-        fileHandler.clear_file('response.txt')                  # Clear file , this method: 'fileHandler.write_strings_into_file' open file in mode append , need first time be empty
+        fileHandler.clear_file(ENVIROMENT['FILE_RESPONSE'])                  # Clear file , this method: 'fileHandler.write_strings_into_file' open file in mode append , need first time be empty
         
         line_count = 0                                          # This counter is used in the method: 'fileHandler.read_strings_from_file' to maintain the order of reading lines from the file
         while(True):
@@ -43,5 +40,5 @@ if __name__ == "__main__":
             fileHandler.write_strings_into_file(response,separator="")
             
         client_socket.close_socket()
-        logging.info(f"Process completed in   [{time.time() - start_time}] seconds")
+        logging.info(f"Process completed in [{time.time() - start_time}] seconds")
     
