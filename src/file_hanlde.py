@@ -18,7 +18,7 @@ class fileHandler():
             having 2 consecutive spaces, I take the odd (or maybe even) values that remain, 
             so the possible blank spaces will always be separated by at least an even number
         """
-        spaces = random.randint(ENVIROMENT['SPACES_MIN'], ENVIROMENT["SPACES_MAX"])                                           # Generate numbers of spaces to insert
+        spaces = random.randint(3, 5)                                           # Generate numbers of spaces to insert
         
         # Avoid spaces using odd number and [1,max-1] range
         available_positions = [i for i in range(1,len(word)-1) if i%2 != 0]       
@@ -35,7 +35,7 @@ class fileHandler():
                 - The range defined by the constants WORD_MIN_LEN and WORD_MAX_LEN
         """
         valid_caracters = string.ascii_letters + string.digits 
-        return ''.join(random.choice(valid_caracters) for _ in range(ENVIROMENT['WORD_MIN_LEN'],ENVIROMENT['WORD_MAX_LEN']))
+        return ''.join(random.choice(valid_caracters) for _ in range(50,95))    #   Max range is 95 because the maximum is 100 characters. If I have a maximum of 5 spaces, the maximum case of 95 + 5 would make 100.
    
     @staticmethod
     def __generate_and_write(filename:str,separator,_range):

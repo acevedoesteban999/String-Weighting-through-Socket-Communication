@@ -27,8 +27,10 @@ class serverSocketHanlder(socketHandler):
                 length (95 + 5 + 1; 5 to reach 100 and one for the separator 
                 character '\n') plus 10 bytes for other protocol characters, 
                 such as end-of-line characters
+                    - Why 95? Because the maximum is 100 characters. If I have a maximum of 5 
+                    spaces, the maximum case of 95 + 5 would make 100.
             """
-            MAX_RECV = ENVIROMENT['MAX_ITEMS_TO_SEND'] * (ENVIROMENT['WORD_MAX_LEN'] + 5) + 10
+            MAX_RECV = ENVIROMENT['MAX_LINES_TO_SEND'] * (ENVIROMENT['WORD_MAX_LEN'] + 5) + 10
             
             while True:
                 conn, _ = sock.accept()                                 # Accept a client
