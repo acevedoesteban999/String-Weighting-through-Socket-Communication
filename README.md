@@ -1,17 +1,23 @@
 # String Weighting through Socket Communication
 
-## Overview
+### Overview
 
   >This project implements a system for calculating the weight of strings through socket communication, efficiently managing data transfer between a client and a server to enable dynamic calculations based on the transmitted strings
 
-## Features
+### Features
 
 > - **Socket Communication**: Establishes a reliable connection between the client and server for data transfer.
 > - **String Weighting Calculation**: Computes the weight of strings based on predefined criteria.
 > - **Configurable Parameters**: Allows users to adjust parameters for string weighting calculations.
 > - **Memory Optimization**: This project is optimized to minimize memory consumption, allowing for operation with a high data throughput without critically affecting dynamic memory
 
+<br/>
+
+<hr/>
+
 ## Getting Started
+
+<hr/>
 
 ### Prerequisites
 
@@ -19,11 +25,11 @@
 
 ### Installation
 
-##### 1 . Clone the repository:    
+#### 1 . Clone the repository:    
     
     git clone https://github.com/acevedoesteban999/String-Weighting-through-Socket-Communication 
 
-##### 2 . Create a .env file in the root of the project:
+#### 2 . Create a .env file in the root of the project:
 
     HOST = localhost
     PORT = 8080
@@ -33,13 +39,13 @@
     FILE_STRINGS = chains.txt
     FILE_RESPONSE = response.txt
 
-##### 3 . Init Server
+#### 3 . Init Server
     
     python server.py
     
 It should look something like: '*Server init on localhost:8080*'
 
-##### 4 . Init Client:
+#### 4 . Init Client:
 
     python client.py
 
@@ -50,7 +56,7 @@ It should look something like
         * Minimum 1 string
         * Maximum 1 000 000 strings
 
-##### 5 . Insert string counter:
+#### 5 . Insert string counter:
 
 Wait for the process to finish and see something like:
 
