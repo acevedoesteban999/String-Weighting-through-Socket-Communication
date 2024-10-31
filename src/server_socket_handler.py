@@ -5,7 +5,6 @@ from .environ_handler import ENVIROMENT
 class serverSocketHanlder(socketHandler): 
     """
         Handler Server Socket 
-        
             - The server must receive the data separated by '\\n' and return the same format for the weightings
     """
     
