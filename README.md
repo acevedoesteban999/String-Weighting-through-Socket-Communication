@@ -13,11 +13,8 @@
 
 <br/>
 
-<hr/>
 
 ## Getting Started
-
-<hr/>
 
 ### Prerequisites
 
@@ -66,7 +63,7 @@ When you reach this point, you will have two files: one with the generated strin
 <br/>
 <hr/> 
 
-###### Important
+##### Important
 
 - The server only starts if a socket connection to the server is established, to avoid unnecessary work on the files
 - The parameters MAX_LINES_TO_SEND and READ_WRITE_MAX_LINES are responsible for optimizing memory usage against speed
