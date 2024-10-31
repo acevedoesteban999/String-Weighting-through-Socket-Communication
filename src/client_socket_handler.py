@@ -3,7 +3,11 @@ import logging
 from .environ_handler import ENVIROMENT
 
 
-class clientSocketHanlder(socketHandler):   
+class clientSocketHanlder(socketHandler):
+    """
+        Handler Client Socket 
+            - This client sends the data separated by '\\n' and expects to receive the same format from the server
+    """   
     def socket_handler_init(self) -> bool:
         """
             Init Client Handle Socket
@@ -20,7 +24,6 @@ class clientSocketHanlder(socketHandler):
     def send_strings_data(self,data_str:str) -> str:
         """
             Send strings agrupadted to server
-                - This method use MAX_LINES_TO_SEND global variable
         """
         
         # To group, all values will be stored in a string, and with a counter, the send event will be triggered
