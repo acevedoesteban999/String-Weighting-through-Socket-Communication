@@ -2,11 +2,8 @@ import logging
 import random
 import string
 from typing import Union
+from .environ_handler import ENVIROMENT
 
-WORD_MIN_LEN = 50
-WORD_MAX_LEN = 100
-GENERATE_MAX_LINES = 1000
-READ_WRITE_MAX_LINES = 100
 
 class fileHandler():
     """
@@ -21,13 +18,13 @@ class fileHandler():
             having 2 consecutive spaces, I take the odd (or maybe even) values that remain, 
             so the possible blank spaces will always be separated by at least an even number
         """
-        spaces = random.randint(3, 5)                                           #generate numbers of spaces to insert
+        spaces = random.randint(3, 5)                                           # Generate numbers of spaces to insert
         
         # Avoid spaces using odd number and [1,max-1] range
         available_positions = [i for i in range(1,len(word)-1) if i%2 != 0]       
-        pos = random.sample(available_positions, spaces)                        # choise a random positions
+        pos = random.sample(available_positions, spaces)                        # Choise a random positions
         for _pos in sorted(pos):        
-            word = word[:_pos] + ' ' + word[_pos:]                              # insert sections into word
+            word = word[:_pos] + ' ' + word[_pos:]                              # Insert sections into word
         
         return word
     
@@ -38,7 +35,7 @@ class fileHandler():
                 - The range defined by the constants WORD_MIN_LEN and WORD_MAX_LEN
         """
         valid_caracters = string.ascii_letters + string.digits 
-        return ''.join(random.choice(valid_caracters) for _ in range(WORD_MIN_LEN,WORD_MAX_LEN))
+        return ''.join(random.choice(valid_caracters) for _ in range(50,95))    #   Max range is 95 because the maximum is 100 characters. If I have a maximum of 5 spaces, the maximum case of 95 + 5 would make 100.
    
     @staticmethod
     def __generate_and_write(filename:str,separator,_range):
@@ -95,11 +92,11 @@ class fileHandler():
         
     
         # Number of cycles to reach the highest value of GENERATE_MAX_LINES without exceeding
-        for _ in range(int(count_str/GENERATE_MAX_LINES)):
-            fileHandler.__generate_and_write(filename,separator,GENERATE_MAX_LINES)
+        for _ in range(int(count_str / ENVIROMENT['GENERATE_MAX_LINES'])):
+            fileHandler.__generate_and_write(filename,separator,ENVIROMENT['GENERATE_MAX_LINES'])
         
         # Remaining words that need to be generated; this number is less than GENERATE_MAX_LINES
-        fileHandler.__generate_and_write(filename,separator,count_str%GENERATE_MAX_LINES)
+        fileHandler.__generate_and_write(filename,separator,count_str % ENVIROMENT['GENERATE_MAX_LINES'])
         
     
     @staticmethod
@@ -120,7 +117,7 @@ class fileHandler():
                 if not file.readline():                 # return if is end of file
                     return lines,line_count  
             
-            for _ in range(READ_WRITE_MAX_LINES):       # read READ_WRITE_MAX_LINES lines 
+            for _ in range(ENVIROMENT['READ_WRITE_MAX_LINES']):       # read READ_WRITE_MAX_LINES lines 
                 _line = file.readline(106)
                 if not _line:                           # return if is end of file
                     return lines,line_count

@@ -1,12 +1,12 @@
 import socket
 from abc import ABC, abstractmethod
-
+from ..environ_handler import ENVIROMENT
 class socketHandler(ABC):
     """
         Abstract Class for handling sockets
     """
     
-    def __init__(self, host:str | int ='localhost', port:int=8080 ,proto:int = socket.AF_INET , fileno:int|None = socket.SOCK_STREAM ):
+    def __init__(self, host:str | int =ENVIROMENT['HOST'], port:int=ENVIROMENT["PORT"] ,proto:int = socket.AF_INET , fileno:int|None = socket.SOCK_STREAM ):
         self._host = host
         self._port = port
         self._socket = socket.socket(proto, fileno)

@@ -2,3 +2,4 @@ __pycache__/
 .venv/
 chains.txt
 response.txt
+.env
